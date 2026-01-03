@@ -7,3 +7,11 @@ It uses libcurl to get price data from coingecko and then a basic json parser to
 I wrote it in about 4 hours so its pretty messy.
 
 It requires libcurl and cJSON.
+
+Basic usage would be something like "crypto-conv xmr gbp 20 ftc"
+
+This would display £20 worth of Monero.
+
+Another example would be "crypto-conv ltc usd 4.2 ctf"
+
+This would display 4.2 Litecoin in USD.

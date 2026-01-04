@@ -8,10 +8,23 @@ I wrote it in about 4 hours so its pretty messy.
 
 It requires libcurl and cJSON.
 
-Basic usage would be something like "crypto-conv xmr gbp 20 ftc"
+Basic usage would be something like "coinprice -f gbp -c xmr -a 55 -F"
 
-This would display £20 worth of Monero.
+This would display £55 worth of Monero.
 
-Another example would be "crypto-conv ltc usd 4.2 ctf"
+Another example would be "coinprice -c ltc -c usd -a 4.2"
 
 This would display 4.2 Litecoin in USD.
+
+There is a basic config file system where a user can have a config file in one of these locations:
+~/.config/coinprice/coinprice.conf
+~/.config/coinprice.conf
+~/.coinprice.conf
+
+The syntax is very simple, and example config would look like this:
+coin=ltc
+holdings=22.9221
+fiat=eur
+
+This will mean the program will run with the default coin as Litecoin, the holdings amount as 22.9221 and the fiat currency as Euros.
+The program will now use these values before evaluating any command line arguments, this makes it useful for scripts or just quick usage.

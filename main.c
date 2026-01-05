@@ -1,3 +1,6 @@
+/*
+ * Author - William Green
+ */
 #include <stdio.h>
 #include <ctype.h>
 #include <fcntl.h>
@@ -34,7 +37,8 @@ enum {
   ETH,
   DOGE,
   BCH, 
-  USDT, 
+  USDT,
+  WOW /* coins like wownero which are not listed on coingecko may be inaccurate / not work */
 };
 
 struct token_map {
@@ -62,8 +66,6 @@ struct page_data {
 };
 
 static int help(const char *);
-static int which_coin(const char *);
-static int which_fiat(const char *);
 static char *get_page(const char *);
 size_t write_page_data(void *, size_t, size_t, void *);
 static char *append_str(char *, char *);
@@ -101,6 +103,7 @@ const struct coin_map c_map[] = {
   { "doge", "doge", DOGE, "https://api.coingecko.com/api/v3/simple/price?ids=doge&vs_currencies=" },
   { "bch", "bitcoin-cash",  BCH, "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin-cash&vs_currencies=" },
   { "usdt", "tether",  USDT, "https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=" },
+  { "wow",  "wownero", WOW,  "https://api.coingecko.com/api/v3/simple/price?ids=wownero&vs_currencies=" },
 };
 
 double conf_holdings  = 0.0f;
@@ -348,9 +351,8 @@ exit:
 static int
 do_read_config(const char *path)
 {
-  char c;
   int fd, len, index;
-  char *buf = (char *) 0;
+  char c, *buf = (char *) 0;
 
   fd = len = -1;
 
@@ -584,6 +586,10 @@ read_opts(int argc, char **argv)
           opt_holdings = 1;
 
           i++;
+          break;
+        case 'b': /* display holdings (b for balance) */
+          opt_display_price = 0;
+          opt_holdings = 1;
           break;
         case 'c': /* crypto currency (coin), requires 1 arg */
           if (!argv[i+1]) { /* no next arg, fail */

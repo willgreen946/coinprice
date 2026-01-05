@@ -145,6 +145,16 @@ main(int argc, char **argv)
 
   free(json);
 
+  /*
+   * if its 0 to 8 digits we can assume there was an error in getting the price
+   * coingecko likes to timeout if we spam requests TODO
+   */
+  if (price == 0.00f) {
+    fprintf(stderr,
+    "network error : coingecko timed out : try again in 60 seconds\n");
+    return -1;
+  }
+
   if (opt_display_price == 1) {
     display_price(conf_coin, conf_fiat, price);
     return 0;
@@ -161,6 +171,7 @@ help(const char *cmd)
 {
   printf("%s usage:\n-f <fiat currency>\n-c <crypto currency>\n", cmd);
   printf("-a <amount of X currency> : will use this value in calculations\n");
+  printf("-b to display the amount of a crypto currency you hold in fiat currency\n");
   printf("-C to do crypto->fiat conversions\n");
   printf("-F to do fiat->crypto conversions\n");
   printf("-p to display the price of a crypto currency\n");
